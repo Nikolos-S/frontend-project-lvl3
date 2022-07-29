@@ -1,4 +1,4 @@
-name: 'run bug fix'
+name: ''run bug fix
 on:
   - push
 
