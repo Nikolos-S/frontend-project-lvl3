@@ -1,7 +1,7 @@
 name: 'run bug fix'
 
 on:
- - pus
+ - push
  - pull_request
 
 jobs:
