@@ -4,8 +4,8 @@
   "description": "My webpack project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode=production --node-env=production",
+    "test": "npx jest --bail --color",
+    "build": "NODE_ENV=production webpack --mode production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/Nikolos-S/frontend-project-lvl3.git"
   },
-  "author": "",
+  "author": "Nikolos-S",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Nikolos-S/frontend-project-lvl3/issues"
