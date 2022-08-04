@@ -28,10 +28,21 @@
             <section class="container-fluid bg-dark p-5">
                 <div class="row">
                     <div class="col-md-10 col-lg-8 mx-auto text-white">
-                        <h1 class="display-3 mb-0">RSS агрегатор</h1>
+                        <div class="row">
+                            <div class="col">
+                                <h1 class="display-3 mb-0">RSS агрегатор</h1>
+                            </div>
+                            <div class="container m-3 col-auto d-flex align-items-end">
+                                <div class="btn-group" role="group" id ="language">
+                                    <button type="button" class="btn mb-3 btn-outline-primary" id="en">English</button>
+                                    <button type="button" class="btn mb-3 btn-primary" id="ru">Русский</button>
+                                </div>
+                            </div>
+                        </div>
                         <p class="lead">Начните читать RSS сегодня! Это легко, это красиво.</p>
                         <form action="" class="rss-form text-body">
-                            <div class="row"><div class="col">
+                            <div class="row">
+                                <div class="col">
                                 <div class="form-floating">
                                     <input id="url-input" autofocus="" required="" name="url" aria-label="url" class="form-control w-100" placeholder="ссылка RSS" autocomplete="off">
                                     <label for="url-input">Ссылка RSS</label>
@@ -61,6 +72,7 @@
     <footer class="footer border-top py-3 mt-5 bg-light">
         <div class="container-xl">
             <div class="text-center">created by <a href="https://github.com/Nikolos-S" target="_blank">Github</a>
+                <div class="text-center">О приложении <a href="https://en.wikipedia.org/wiki/RSS" target="_blank">RSS-канал</a>
             </div>
         </div>
     </footer>

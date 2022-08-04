@@ -1,13 +1,13 @@
 import isEmpty from 'lodash/isEmpty.js';
-import i18nInstance from './locales/interpreter.js';
+import i18nInstance from '../locales/interpreter.js';
 
-export default (state) => {
+export default (state, currentValid) => {
   const input = document.querySelector('input[name="url"]');
   input.value = '';
   input.focus();
   const parent = input.closest('.text-white');
   const pEl = document.createElement('p');
-  if (isEmpty(state.registrationForm.state)) {
+  if (isEmpty(currentValid)) {
     input.classList.remove('is-invalid');
     pEl.classList.add('feedback', 'm-0', 'position-absolute', 'small', 'text-success');
     state.registrationForm.urls.push(state.registrationForm.currentURL);
