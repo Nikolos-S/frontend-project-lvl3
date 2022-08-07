@@ -4,5 +4,6 @@ export default {
     errRequired: 'You missed this field',
     repleated: 'RSS already exists',
     success: 'RSS uploaded successfully',
+    feeds: 'Feeds',
   },
 };

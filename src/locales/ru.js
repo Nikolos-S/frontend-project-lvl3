@@ -4,5 +4,6 @@ export default {
     errRequired: 'Вы пропустили это поле',
     repleated: 'RSS уже существует',
     success: 'RSS успешно загружен',
+    feeds: 'Фиды',
   },
 };

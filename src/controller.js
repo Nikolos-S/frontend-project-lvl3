@@ -1,7 +1,9 @@
 import onChange from 'on-change';
 import * as yup from 'yup';
 import renderVAlid from './renders/renderValid.js';
+import renderNoValid from './renders/renderNoValid';
 import renderLang from './renders/renderLang.js';
+import parser from './renders/parser.js';
 import i18nInstance from './locales/interpreter.js';
 
 const application = () => {
@@ -9,9 +11,16 @@ const application = () => {
   const state = {
     lng: defaultLanguage,
     registrationForm: {
-      state: null,
+      state: {
+        error: null,
+        success: null,
+      },
       urls: [],
       currentURL: null,
+    },
+    data: {
+      feeds: [],
+      posts: [],
     },
   };
 
@@ -21,13 +30,15 @@ const application = () => {
       .required(i18nInstance(state.lng, 'errRequired'))
       .notOneOf([urls], i18nInstance(state.lng, 'repleated'));
     return schema.validate(url)
-      .then(() => {}).catch((err) => err);
+      .then(() => true).catch((err) => err);
   };
 
   const watchedState = onChange(state, (path, currentValid) => {
     switch (path) {
-      case 'registrationForm.state':
-        return renderVAlid(state, currentValid);
+      case 'registrationForm.state.success':
+        return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'));
+      case 'registrationForm.state.error':
+        return renderNoValid(currentValid);
       case 'lng':
         return renderLang();
       default:
@@ -37,13 +48,27 @@ const application = () => {
 
   const form = document.querySelector('.rss-form');
   form.addEventListener('submit', (e) => {
+    state.registrationForm.state.error = null;
+    state.registrationForm.state.success = null;
     e.preventDefault();
     const formData = new FormData(e.target);
     const url = formData.get('url');
-    const data = state.registrationForm.urls;
     state.registrationForm.currentURL = url;
+    const data = state.registrationForm.urls;
     validate(url, data).then((err) => {
-      watchedState.registrationForm.state = err;
+      console.log(err);
+      if (err === true) {
+        parser(state).then((parserData) => {
+          const [feedData, postsData] = parserData;
+          state.data.feeds.push(feedData);
+          state.data.posts.push(...postsData);
+          state.registrationForm.urls.push(state.registrationForm.currentURL);
+          watchedState.registrationForm.state.success = i18nInstance(state.lng, 'success');
+        });
+        // console.log(state.data);
+      }
+      watchedState.registrationForm.state.error = err;
+      console.log(state);
     });
   });
 
@@ -52,6 +77,7 @@ const application = () => {
   languages.forEach((language) => {
     language.addEventListener('click', (e) => {
       watchedState.lng = e.target.id;
+      e.preventDefault();
     });
   });
 };
