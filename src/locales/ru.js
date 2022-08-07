@@ -5,5 +5,6 @@ export default {
     repleated: 'RSS уже существует',
     success: 'RSS успешно загружен',
     feeds: 'Фиды',
+    posts: 'Посты',
   },
 };

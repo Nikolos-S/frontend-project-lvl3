@@ -5,5 +5,6 @@ export default {
     repleated: 'RSS already exists',
     success: 'RSS uploaded successfully',
     feeds: 'Feeds',
+    posts: 'Posts',
   },
 };

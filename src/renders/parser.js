@@ -24,7 +24,7 @@ const buildFeed = (document) => {
   return [feedData, postsData];
 };
 
-export default (state) => {
+const parserData = (state) => {
   const url = state.registrationForm.currentURL;
   const dataParse = fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
     .then((response) => {
@@ -40,3 +40,5 @@ export default (state) => {
     });
   return dataParse;
 };
+
+export default parserData;

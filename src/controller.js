@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import renderVAlid from './renders/renderValid.js';
 import renderNoValid from './renders/renderNoValid';
 import renderLang from './renders/renderLang.js';
-import parser from './renders/parser.js';
+import parserData from './renders/parser.js';
 import i18nInstance from './locales/interpreter.js';
 
 const application = () => {
@@ -25,6 +25,8 @@ const application = () => {
   };
 
   const validate = (url, urls) => {
+    console.log(typeof url);
+    console.log(urls.forEach((u) => typeof u));
     const schema = yup.string().trim()
       .url(i18nInstance(state.lng, 'errURL'))
       .required(i18nInstance(state.lng, 'errRequired'))
@@ -36,7 +38,7 @@ const application = () => {
   const watchedState = onChange(state, (path, currentValid) => {
     switch (path) {
       case 'registrationForm.state.success':
-        return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'));
+        return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'));
       case 'registrationForm.state.error':
         return renderNoValid(currentValid);
       case 'lng':
@@ -55,20 +57,20 @@ const application = () => {
     const url = formData.get('url');
     state.registrationForm.currentURL = url;
     const data = state.registrationForm.urls;
+    console.log(typeof url);
     validate(url, data).then((err) => {
-      console.log(err);
+      console.log(typeof url);
       if (err === true) {
-        parser(state).then((parserData) => {
-          const [feedData, postsData] = parserData;
+        parserData(state).then((normalizData) => {
+          const [feedData, postsData] = normalizData;
           state.data.feeds.push(feedData);
           state.data.posts.push(...postsData);
           state.registrationForm.urls.push(state.registrationForm.currentURL);
           watchedState.registrationForm.state.success = i18nInstance(state.lng, 'success');
         });
-        // console.log(state.data);
+      } else {
+        watchedState.registrationForm.state.error = err;
       }
-      watchedState.registrationForm.state.error = err;
-      console.log(state);
     });
   });
 
