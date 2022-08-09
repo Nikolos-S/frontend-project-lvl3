@@ -4,6 +4,9 @@ import renderVAlid from './renders/renderValid.js';
 import renderNoValid from './renders/renderNoValid';
 import renderLang from './renders/renderLang.js';
 import parserData from './renders/parser.js';
+import normalizDataFeed from './renders/normalizDataFeed.js';
+import normalizDataPost from './renders/normalizDataPost.js';
+import checkList from './renders/checkList.js';
 import i18nInstance from './locales/interpreter.js';
 
 const application = () => {
@@ -25,8 +28,6 @@ const application = () => {
   };
 
   const validate = (url, urls) => {
-    console.log(typeof url);
-    console.log(urls.forEach((u) => typeof u));
     const schema = yup.string().trim()
       .url(i18nInstance(state.lng, 'errURL'))
       .required(i18nInstance(state.lng, 'errRequired'))
@@ -38,6 +39,8 @@ const application = () => {
   const watchedState = onChange(state, (path, currentValid) => {
     switch (path) {
       case 'registrationForm.state.success':
+        return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'));
+      case 'data.posts':
         return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'));
       case 'registrationForm.state.error':
         return renderNoValid(currentValid);
@@ -56,17 +59,25 @@ const application = () => {
     const formData = new FormData(e.target);
     const url = formData.get('url');
     state.registrationForm.currentURL = url;
-    const data = state.registrationForm.urls;
-    console.log(typeof url);
-    validate(url, data).then((err) => {
-      console.log(typeof url);
+    const ListUrl = state.registrationForm.urls;
+    validate(url, ListUrl).then((err) => {
       if (err === true) {
-        parserData(state).then((normalizData) => {
-          const [feedData, postsData] = normalizData;
-          state.data.feeds.push(feedData);
-          state.data.posts.push(...postsData);
-          state.registrationForm.urls.push(state.registrationForm.currentURL);
+        ListUrl.push(state.registrationForm.currentURL);
+        parserData(url).then((normalized) => {
+          state.data.feeds.push(normalizDataFeed(normalized));
+          state.data.posts.push(...normalizDataPost(normalized));
           watchedState.registrationForm.state.success = i18nInstance(state.lng, 'success');
+          state.registrationForm.urls.forEach((index) => parserData(index)
+            .then((promise) => {
+              const loops = () => {
+                setTimeout(() => {
+                  const post = normalizDataPost(promise);
+                  console.log(checkList(post, state.data.posts));
+                  loops();
+                }, 5000);
+              };
+              loops();
+            }));
         });
       } else {
         watchedState.registrationForm.state.error = err;
