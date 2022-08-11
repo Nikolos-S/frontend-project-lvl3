@@ -2,4 +2,5 @@
 // import normalizData from './normalizData.js';
 
 export default (currentPosts, posts) => currentPosts
-  .filter((element) => posts.findIndex((el) => el.title === element.title) === -1);
+  .filter((element) => posts
+    .findIndex((el) => el.title === element.title) === -1);

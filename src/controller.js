@@ -27,14 +27,10 @@ const application = () => {
     },
   };
 
-  const validate = (url, urls) => {
-    const schema = yup.string().trim()
-      .url(i18nInstance(state.lng, 'errURL'))
-      .required(i18nInstance(state.lng, 'errRequired'))
-      .notOneOf([urls], i18nInstance(state.lng, 'repleated'));
-    return schema.validate(url)
-      .then(() => true).catch((err) => err);
-  };
+  const schema = yup.string().trim()
+    .url(i18nInstance(state.lng, 'errURL'))
+    .required(i18nInstance(state.lng, 'errRequired'))
+    .notOneOf([state.registrationForm.urls], i18nInstance(state.lng, 'repleated'));
 
   const watchedState = onChange(state, (path, currentValid) => {
     switch (path) {
@@ -60,29 +56,28 @@ const application = () => {
     const url = formData.get('url');
     state.registrationForm.currentURL = url;
     const ListUrl = state.registrationForm.urls;
-    validate(url, ListUrl).then((err) => {
-      if (err === true) {
+    schema.validate(url)
+      .then(() => {
         ListUrl.push(state.registrationForm.currentURL);
         parserData(url).then((normalized) => {
           state.data.feeds.push(normalizDataFeed(normalized));
           state.data.posts.push(...normalizDataPost(normalized));
           watchedState.registrationForm.state.success = i18nInstance(state.lng, 'success');
-          state.registrationForm.urls.forEach((index) => parserData(index)
-            .then((promise) => {
-              const loops = () => {
-                setTimeout(() => {
-                  const post = normalizDataPost(promise);
-                  console.log(checkList(post, state.data.posts));
-                  loops();
-                }, 5000);
-              };
-              loops();
-            }));
         });
-      } else {
+      }).catch((err) => {
         watchedState.registrationForm.state.error = err;
-      }
-    });
+      });
+    const loops = () => {
+      setTimeout(() => {
+        parserData(url).then((promise) => {
+          console.log(url);
+          console.log(promise);
+          // console.log(normalizDataPost(promise));
+        });
+        loops();
+      }, 5000);
+    };
+    loops();
   });
 
   const divLanguage = document.querySelector('#language');
@@ -96,3 +91,36 @@ const application = () => {
 };
 
 export default application;
+
+/*
+schema.validate(url)
+      .then(() => true).catch((err) => err);
+
+validate(url, ListUrl).then((err) => {
+      if (err === true) {
+        ListUrl.push(state.registrationForm.currentURL);
+        parserData(url).then((normalized) => {
+          state.data.feeds.push(normalizDataFeed(normalized));
+          state.data.posts.push(...normalizDataPost(normalized));
+          watchedState.registrationForm.state.success = i18nInstance(state.lng, 'success');
+        });
+      } else {
+        watchedState.registrationForm.state.error = err;
+      }
+    });
+
+state.registrationForm.urls.forEach((index) => parserData(index)
+            .then((promise) => {
+              // console.log(promise);
+              const loops = () => {
+                setTimeout(() => {
+                  // console.log(promise);
+                  console.log(normalizDataPost(promise));
+                  // const post = normalizDataPost(promise);
+                  // console.log(checkList(post, state.data.posts));
+                  loops();
+                }, 5000);
+              };
+              loops();
+            }));
+*/
