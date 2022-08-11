@@ -6,7 +6,7 @@ import renderLang from './renders/renderLang.js';
 import parserData from './renders/parser.js';
 import normalizDataFeed from './renders/normalizDataFeed.js';
 import normalizDataPost from './renders/normalizDataPost.js';
-import checkList from './renders/checkList.js';
+// import checkList from './renders/checkList.js';
 import i18nInstance from './locales/interpreter.js';
 
 const application = () => {
