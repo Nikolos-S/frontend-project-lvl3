@@ -2,7 +2,6 @@ import onChange from 'on-change';
 import * as yup from 'yup';
 import renderVAlid from './renders/renderValid.js';
 import renderNoValid from './renders/renderNoValid';
-import renderLang from './renders/renderLang.js';
 import parserData from './renders/parser.js';
 import normalizDataFeed from './renders/normalizDataFeed.js';
 import normalizDataPost from './renders/normalizDataPost.js';
@@ -35,13 +34,11 @@ const application = () => {
   const watchedState = onChange(state, (path, currentValid) => {
     switch (path) {
       case 'registrationForm.state.success':
-        return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'));
+        return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'), i18nInstance(state.lng, 'success'));
       case 'data.posts':
         return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'));
       case 'registrationForm.state.error':
         return renderNoValid(currentValid);
-      case 'lng':
-        return renderLang();
       default:
         return null;
     }
@@ -67,7 +64,23 @@ const application = () => {
       }).catch((err) => {
         watchedState.registrationForm.state.error = err;
       });
-    const loops = () => {
+  });
+  const loops = () => {
+    setTimeout(() => {
+      parserData(state.registrationForm.currentURL).then((promise) => {
+        console.log(promise);
+        console.log(normalizDataPost(promise));
+      });
+      loops();
+    }, 5000);
+  };
+  loops();
+};
+
+export default application;
+
+/*
+const loops = () => {
       setTimeout(() => {
         parserData(url).then((promise) => {
           console.log(url);
@@ -78,49 +91,4 @@ const application = () => {
       }, 5000);
     };
     loops();
-  });
-
-  const divLanguage = document.querySelector('#language');
-  const languages = divLanguage.querySelectorAll('button');
-  languages.forEach((language) => {
-    language.addEventListener('click', (e) => {
-      watchedState.lng = e.target.id;
-      e.preventDefault();
-    });
-  });
-};
-
-export default application;
-
-/*
-schema.validate(url)
-      .then(() => true).catch((err) => err);
-
-validate(url, ListUrl).then((err) => {
-      if (err === true) {
-        ListUrl.push(state.registrationForm.currentURL);
-        parserData(url).then((normalized) => {
-          state.data.feeds.push(normalizDataFeed(normalized));
-          state.data.posts.push(...normalizDataPost(normalized));
-          watchedState.registrationForm.state.success = i18nInstance(state.lng, 'success');
-        });
-      } else {
-        watchedState.registrationForm.state.error = err;
-      }
-    });
-
-state.registrationForm.urls.forEach((index) => parserData(index)
-            .then((promise) => {
-              // console.log(promise);
-              const loops = () => {
-                setTimeout(() => {
-                  // console.log(promise);
-                  console.log(normalizDataPost(promise));
-                  // const post = normalizDataPost(promise);
-                  // console.log(checkList(post, state.data.posts));
-                  loops();
-                }, 5000);
-              };
-              loops();
-            }));
 */
