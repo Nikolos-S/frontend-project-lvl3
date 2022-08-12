@@ -7,6 +7,8 @@ import normalizDataFeed from './renders/normalizDataFeed.js';
 import normalizDataPost from './renders/normalizDataPost.js';
 // import checkList from './renders/checkList.js';
 import i18nInstance from './locales/interpreter.js';
+import checkList from './renders/checkList.js';
+import update from './renders/update.js';
 
 const application = () => {
   const defaultLanguage = 'ru';
@@ -36,7 +38,7 @@ const application = () => {
       case 'registrationForm.state.success':
         return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'), i18nInstance(state.lng, 'success'));
       case 'data.posts':
-        return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'));
+        return update(currentValid);
       case 'registrationForm.state.error':
         return renderNoValid(currentValid);
       default:
@@ -60,6 +62,8 @@ const application = () => {
           state.data.feeds.push(normalizDataFeed(normalized));
           state.data.posts.push(...normalizDataPost(normalized));
           watchedState.registrationForm.state.success = i18nInstance(state.lng, 'success');
+          checkList(ListUrl, state.data.posts).forEach((promise) => promise
+            .then((filtrData) => state.data.posts.push(...filtrData)));
         });
       }).catch((err) => {
         watchedState.registrationForm.state.error = err;
@@ -67,10 +71,11 @@ const application = () => {
   });
   const loops = () => {
     setTimeout(() => {
-      parserData(state.registrationForm.currentURL).then((promise) => {
-        console.log(promise);
-        console.log(normalizDataPost(promise));
-      });
+      checkList(state.registrationForm.urls, state.data.posts).forEach((promise) => promise
+        .then((filtrData) => {
+          const arr = [...state.data.posts, ...filtrData];
+          watchedState.data.posts = arr;
+        }));
       loops();
     }, 5000);
   };
@@ -80,6 +85,15 @@ const application = () => {
 export default application;
 
 /*
+const loops = () => {
+    setTimeout(() => {
+      checkList(ListUrl, state.data.posts).forEach((promise) => promise
+            .then((filtrData) => state.data.posts.push(...filtrData)));
+      });
+      loops();
+    }, 5000);
+  };
+  loops();
 const loops = () => {
       setTimeout(() => {
         parserData(url).then((promise) => {

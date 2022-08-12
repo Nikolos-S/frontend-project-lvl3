@@ -1,9 +1,10 @@
+import axios from 'axios';
+
 const parserData = (url) => {
-  const dataParse = fetch(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
+  const newUrl = new URL(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`);
+  const dataParse = axios.get(newUrl)
+    .then((response) => response.data)
+    .catch(() => {
       throw new Error('Network response was not ok.');
     })
     .then((data) => {
