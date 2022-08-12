@@ -5,7 +5,6 @@ import renderNoValid from './renders/renderNoValid';
 import parserData from './renders/parser.js';
 import normalizDataFeed from './renders/normalizDataFeed.js';
 import normalizDataPost from './renders/normalizDataPost.js';
-// import checkList from './renders/checkList.js';
 import i18nInstance from './locales/interpreter.js';
 import checkList from './renders/checkList.js';
 import update from './renders/update.js';
@@ -17,7 +16,6 @@ const application = () => {
     registrationForm: {
       state: {
         error: null,
-        success: null,
       },
       urls: [],
       currentURL: null,
@@ -35,10 +33,10 @@ const application = () => {
 
   const watchedState = onChange(state, (path, currentValid) => {
     switch (path) {
-      case 'registrationForm.state.success':
-        return renderVAlid(state.data, currentValid, i18nInstance(state.lng, 'feeds'), i18nInstance(state.lng, 'posts'), i18nInstance(state.lng, 'success'));
+      case 'data.feeds':
+        return renderVAlid(currentValid, state.data.posts, state.lng);
       case 'data.posts':
-        return update(currentValid);
+        return update(currentValid, i18nInstance(state.lng, 'vewing'));
       case 'registrationForm.state.error':
         return renderNoValid(currentValid);
       default:
@@ -49,7 +47,6 @@ const application = () => {
   const form = document.querySelector('.rss-form');
   form.addEventListener('submit', (e) => {
     state.registrationForm.state.error = null;
-    state.registrationForm.state.success = null;
     e.preventDefault();
     const formData = new FormData(e.target);
     const url = formData.get('url');
@@ -59,50 +56,25 @@ const application = () => {
       .then(() => {
         ListUrl.push(state.registrationForm.currentURL);
         parserData(url).then((normalized) => {
-          state.data.feeds.push(normalizDataFeed(normalized));
           state.data.posts.push(...normalizDataPost(normalized));
-          watchedState.registrationForm.state.success = i18nInstance(state.lng, 'success');
+          watchedState.data.feeds.push(normalizDataFeed(normalized));
           checkList(ListUrl, state.data.posts).forEach((promise) => promise
             .then((filtrData) => state.data.posts.push(...filtrData)));
         });
       }).catch((err) => {
         watchedState.registrationForm.state.error = err;
       });
-  });
-  const loops = () => {
-    setTimeout(() => {
-      checkList(state.registrationForm.urls, state.data.posts).forEach((promise) => promise
-        .then((filtrData) => {
-          const arr = [...state.data.posts, ...filtrData];
-          watchedState.data.posts = arr;
-        }));
-      loops();
-    }, 5000);
-  };
-  loops();
-};
-
-export default application;
-
-/*
-const loops = () => {
-    setTimeout(() => {
-      checkList(ListUrl, state.data.posts).forEach((promise) => promise
-            .then((filtrData) => state.data.posts.push(...filtrData)));
-      });
-      loops();
-    }, 5000);
-  };
-  loops();
-const loops = () => {
+    const loops = () => {
       setTimeout(() => {
-        parserData(url).then((promise) => {
-          console.log(url);
-          console.log(promise);
-          // console.log(normalizDataPost(promise));
-        });
+        checkList(state.registrationForm.urls, state.data.posts).forEach((promise) => promise
+          .then((filtrData) => {
+            watchedState.data.posts.push(...filtrData);
+          }));
         loops();
       }, 5000);
     };
     loops();
-*/
+  });
+};
+
+export default application;

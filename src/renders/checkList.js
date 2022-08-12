@@ -10,8 +10,3 @@ const checkList = (urls, posts) => {
 };
 
 export default checkList;
-/*
-.reduce((acc, document) => [...acc, document.then((promise) => normalizData(promise)
-        .filter((element) => posts
-          .findIndex((el) => el.title === element.title) === -1))], []);
-*/

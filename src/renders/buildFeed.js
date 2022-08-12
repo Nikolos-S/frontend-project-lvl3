@@ -1,6 +1,6 @@
-export default (feeds, lng) => {
+export default (feeds, i18Feeds) => {
   const container = document.querySelector('.feeds');
-  container.innerHTML = `<div><div><h2>${lng}</h2></div><ul></ul></div>`;
+  container.innerHTML = `<div><div><h2>${i18Feeds}</h2></div><ul></ul></div>`;
   const listFeed = feeds.reduce((acc, feed) => `${acc}<li><h3>${feed.titleFeed}</h3><p>${feed.descriptionFeed}</p></li>`, '');
   container.querySelector('ul').innerHTML = listFeed;
   const divBorder = container.querySelector('div');
