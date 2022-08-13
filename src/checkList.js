@@ -13,26 +13,3 @@ const checkList = (urls, posts) => {
 };
 
 export default checkList;
-
-/*
-.reduce((acc, document) => [...acc, document.then((promise) => promise
-      .filter((element) => posts
-        .findIndex((el) => el.title === element.title) === -1))], []);
-  console.log(parseUrls);
-
-const checkNewPosts = (state, period = postsCheckInterval) => {
-  let data = state.feedsData;
-  const promises = state.links.map((link) => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
-    .then((response) => {
-      const { contents } = response.data;
-      const parsedDocument = parser(contents);
-      data = normalizeData(parsedDocument, data);
-    }));
-
-  Promise.all(promises).then(() => {
-    state.feedsData = data;
-    setListeners(state);
-    setTimeout(() => checkNewPosts(state), period);
-  });
-};
-*/
