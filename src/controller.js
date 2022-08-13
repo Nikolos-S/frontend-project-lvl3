@@ -1,80 +1,82 @@
-import onChange from 'on-change';
 import * as yup from 'yup';
-import renderVAlid from './renders/renderValid.js';
-import renderNoValid from './renders/renderNoValid';
-import parserData from './renders/parser.js';
-import normalizDataFeed from './renders/normalizDataFeed.js';
-import normalizDataPost from './renders/normalizDataPost.js';
+import parserData from './parser.js';
 import i18nInstance from './locales/interpreter.js';
-import checkList from './renders/checkList.js';
-import update from './renders/update.js';
+import checkList from './checkList.js';
 
-const application = () => {
-  const defaultLanguage = 'ru';
-  const state = {
-    lng: defaultLanguage,
-    registrationForm: {
-      state: {
-        error: null,
-      },
-      urls: [],
-      currentURL: null,
-    },
-    data: {
-      feeds: [],
-      posts: [],
-    },
-  };
-
+export default (state) => {
   const schema = yup.string().trim()
     .url(i18nInstance(state.lng, 'errURL'))
     .required(i18nInstance(state.lng, 'errRequired'))
-    .notOneOf([state.registrationForm.urls], i18nInstance(state.lng, 'repleated'));
+    .notOneOf([state.urls], i18nInstance(state.lng, 'repleated'));
 
-  const watchedState = onChange(state, (path, currentValid) => {
-    switch (path) {
-      case 'data.feeds':
-        return renderVAlid(currentValid, state.data.posts, state.lng);
-      case 'data.posts':
-        return update(currentValid, i18nInstance(state.lng, 'vewing'));
-      case 'registrationForm.state.error':
-        return renderNoValid(currentValid);
-      default:
-        return null;
-    }
-  });
+  const check = () => {
+    setTimeout(() => {
+      checkList(state.urls, state.data.posts)
+        .forEach((promise) => promise
+          .then((filtrData) => {
+            state.data.posts.push(...filtrData);
+            console.log(filtrData);
+          }));
+      check();
+    }, 5000);
+  };
 
   const form = document.querySelector('.rss-form');
   form.addEventListener('submit', (e) => {
-    state.registrationForm.state.error = null;
     e.preventDefault();
     const formData = new FormData(e.target);
     const url = formData.get('url');
-    state.registrationForm.currentURL = url;
-    const ListUrl = state.registrationForm.urls;
+    state.currentURL = url;
     schema.validate(url)
       .then(() => {
-        ListUrl.push(state.registrationForm.currentURL);
-        parserData(url).then((normalized) => {
-          state.data.posts.push(...normalizDataPost(normalized));
-          watchedState.data.feeds.push(normalizDataFeed(normalized));
-          checkList(ListUrl, state.data.posts).forEach((promise) => promise
-            .then((filtrData) => state.data.posts.push(...filtrData)));
+        state.urls.push(state.currentURL);
+        parserData(url).then((promiseNormalizeData) => {
+          const [feedData, postsData] = promiseNormalizeData;
+          state.data.feeds.push(feedData);
+          state.data.posts.push(...postsData);
+          check();
         });
       }).catch((err) => {
-        watchedState.registrationForm.state.error = err;
+        state.error = err;
       });
-    const loops = () => {
-      setTimeout(() => {
-        checkList(state.registrationForm.urls, state.data.posts).forEach((promise) => promise
-          .then((filtrData) => {
-            watchedState.data.posts.push(...filtrData);
-          }));
-        loops();
-      }, 5000);
-    };
-    loops();
   });
 };
 
-export default application;
+/*
+const ListUrl = state.registrationForm.urls;
+  schema.validate(url)
+    .then(() => {
+      ListUrl.push(state.registrationForm.currentURL);
+      parserData(url).then((normalized) => {
+        state.data.posts.push(...normalizDataPost(normalized));
+        state.data.feeds.push(normalizDataFeed(normalized));
+        checkList(ListUrl, state.data.posts).forEach((promise) => promise
+          .then((filtrData) => state.data.posts.push(...filtrData)));
+        const opens = document.querySelectorAll('button[data-toggle="modal"]');
+        opens.forEach((open) => {
+          open.addEventListener('click', () => {
+            console.log(open);
+          });
+        });
+      });
+    }).catch((err) => {
+      state.registrationForm.state.error = err;
+    });
+  const loops = () => {
+    setTimeout(() => {
+      checkList(state.registrationForm.urls, state.data.posts).forEach((promise) => promise
+        .then((filtrData) => {
+          state.data.posts.push(...filtrData);
+          const opens = document.querySelectorAll('button[data-toggle="modal"]');
+          opens.forEach((open) => {
+            open.addEventListener('click', () => {
+              console.log(open);
+            });
+          });
+          // console.log(Promise.all(checkList(state.registrationForm.urls, state.data.posts)));
+        }));
+      loops();
+    }, 5000);
+  };
+  loops();
+  */

@@ -1,8 +1,7 @@
-import buildFeed from './buildFeed.js';
-import buildPosts from './buildPosts.js';
+import buildFeed from '../buildFeed.js';
 import i18nInstance from '../locales/interpreter.js';
 
-export default (feeds, posts, lng) => {
+export default (feeds, lng) => {
   const input = document.querySelector('input[name="url"]');
   input.value = '';
   input.focus();
@@ -14,5 +13,4 @@ export default (feeds, posts, lng) => {
   pEl.textContent = i18nInstance(lng, 'success');
   parent.replaceChild(pEl, parent.querySelector('.feedback'));
   buildFeed(feeds, i18nInstance(lng, 'feeds'));
-  buildPosts(posts, i18nInstance(lng, 'posts'), i18nInstance(lng, 'vewing'));
 };
