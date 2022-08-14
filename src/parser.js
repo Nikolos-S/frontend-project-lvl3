@@ -1,12 +1,10 @@
-import uniqueId from 'lodash/uniqueId.js';
 import networkRequest from './networkRequest.js';
 
-const buildNormalizedData = (document) => {
+const buildNormalizedData = (document, url) => {
   const title = document.querySelector('title').textContent;
   const description = document.querySelector('description').textContent;
-  const idFeed = uniqueId();
   const feedData = {
-    id: idFeed,
+    urlFeed: url,
     titleFeed: title,
     descriptionFeed: description,
   };
@@ -16,7 +14,6 @@ const buildNormalizedData = (document) => {
     const linkPost = item.querySelector('link').textContent;
     const descriptionPost = item.querySelector('description').textContent;
     return [...acc, {
-      feedId: idFeed,
       title: titlePost,
       link: linkPost,
       description: descriptionPost,
@@ -34,7 +31,7 @@ const parserData = (url) => {
     .then((data) => {
       const parser = new DOMParser();
       const domRss = parser.parseFromString(data.contents, 'text/xml');
-      return buildNormalizedData(domRss);
+      return buildNormalizedData(domRss, url);
     });
   return document;
 };

@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import uniqueId from 'lodash/uniqueId.js';
 import parserData from './parser.js';
 import i18nInstance from './locales/interpreter.js';
 import checkList from './checkList.js';
@@ -7,15 +8,14 @@ export default (state) => {
   const schema = yup.string().trim()
     .url(i18nInstance(state.lng, 'errURL'))
     .required(i18nInstance(state.lng, 'errRequired'))
-    .notOneOf([state.urls], i18nInstance(state.lng, 'repleated'));
+    .notOneOf([state.data.urls], i18nInstance(state.lng, 'repleated'));
 
   const check = () => {
     setTimeout(() => {
-      checkList(state.urls, state.data.posts)
+      checkList(state.data.urls, state.data.posts, state.data.feeds)
         .forEach((promise) => promise
           .then((filtrData) => {
             state.data.posts.push(...filtrData);
-            console.log(filtrData);
           }));
       check();
     }, 5000);
@@ -26,18 +26,24 @@ export default (state) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const url = formData.get('url');
-    state.currentURL = url;
     schema.validate(url)
       .then(() => {
-        state.urls.push(state.currentURL);
-        parserData(url).then((promiseNormalizeData) => {
+        parserData(url).catch((error) => {
+          state.error = error;
+        }).then((promiseNormalizeData) => {
           const [feedData, postsData] = promiseNormalizeData;
+          const idFeed = uniqueId();
+          feedData.id = idFeed;
+          postsData.forEach((post) => {
+            post.feedId = idFeed;
+          });
           state.data.feeds.push(feedData);
           state.data.posts.push(...postsData);
-          check();
+          state.data.urls.push(feedData.urlFeed);
         });
       }).catch((err) => {
         state.error = err;
       });
   });
+  check();
 };

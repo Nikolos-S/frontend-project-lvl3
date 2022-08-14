@@ -9,7 +9,7 @@ const render = (lng) => (path, currentValid) => {
     case 'data.posts':
       return buildPosts(currentValid, lng);
     case 'error':
-      return renderNoValid(currentValid);
+      return renderNoValid(currentValid, lng);
     default:
       return null;
   }

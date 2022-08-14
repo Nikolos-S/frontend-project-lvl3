@@ -1,4 +1,6 @@
-export default (error) => {
+import i18nInstance from '../locales/interpreter.js';
+
+export default (error, lng) => {
   const input = document.querySelector('input[name="url"]');
   input.value = '';
   input.focus();
@@ -7,6 +9,6 @@ export default (error) => {
   pEl.classList.add('feedback', 'm-0', 'position-absolute', 'small');
   input.classList.add('is-invalid');
   pEl.classList.add('text-danger');
-  pEl.textContent = error.message;
+  pEl.textContent = (error.message !== 'Cannot read properties of null (reading \'textContent\')') ? error.message : i18nInstance(lng, 'errURL');
   parent.replaceChild(pEl, parent.querySelector('.feedback'));
 };

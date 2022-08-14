@@ -7,9 +7,8 @@ const application = () => {
   const state = onChange({
     lng: defaultLanguage,
     error: null,
-    urls: [],
-    currentURL: null,
     data: {
+      urls: [],
       feeds: [],
       posts: [],
     },
