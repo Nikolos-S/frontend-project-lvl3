@@ -9,5 +9,6 @@ export default {
     posts: 'Посты',
     vewing: 'Просмотр',
     noValid: 'Ресурс не содержит валидный RSS',
+    netErr: 'Ошибка сети',
   },
 };

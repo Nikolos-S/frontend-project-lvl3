@@ -2,14 +2,14 @@ import parserData from './parser.js';
 import filterData from './filtresData.js';
 
 // Деструктируем данные, формирующиеся в парсере, чтобы достать посты
-const splitData = (url) => parserData(url).then((promise) => {
+const splitData = (url, netErr) => parserData(url, netErr).then((promise) => {
   const [, postsData] = promise;
   return postsData;
 });
 
-const checkList = (urls, posts) => {
+const checkList = (urls, posts, netErr) => {
   const parseUrls = urls
-    .reduce((acc, url) => [...acc, splitData(url)
+    .reduce((acc, url) => [...acc, splitData(url, netErr)
       .then((promise) => filterData(promise, posts))], []);
   return parseUrls;
 };

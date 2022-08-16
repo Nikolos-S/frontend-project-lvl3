@@ -12,7 +12,7 @@ export default (state, elements) => {
 
   const checkNewPost = () => {
     setTimeout(() => {
-      checkList(state.data.urls, state.data.posts)
+      checkList(state.data.urls, state.data.posts, i18nInstance(state.lng, 'netErr'))
         .forEach((promise) => promise
           .then((filtrData) => {
             filtrData.forEach((post) => {
@@ -31,7 +31,7 @@ export default (state, elements) => {
     const url = formData.get('url');
     schema.validate(url)
       .then(() => {
-        parserData(url).catch((error) => {
+        parserData(url, i18nInstance(state.lng, 'netErr')).catch((error) => {
           state.error = error;
         }).then((promiseNormalizeData) => {
           const [feedData, postsData] = promiseNormalizeData;

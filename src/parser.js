@@ -22,11 +22,11 @@ const buildNormalizedData = (document, url) => {
   return [feedData, postsData];
 };
 
-const parserData = (url) => {
+const parserData = (url, netErr) => {
   const document = networkRequest(url)
     .then((response) => response.data)
     .catch(() => {
-      throw new Error('Network response was not ok.');
+      throw new Error(netErr);
     })
     .then((data) => {
       const parser = new DOMParser();
