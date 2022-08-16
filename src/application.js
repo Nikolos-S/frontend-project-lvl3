@@ -4,6 +4,14 @@ import controllerSubmit from './controllerSubmit.js';
 import controllerClick from './controllerClick.js';
 
 const application = () => {
+  const elements = {
+    form: document.querySelector('.rss-form'),
+    submit: document.querySelector('[type="submit"]'),
+    containerFeeds: document.querySelector('.feeds'),
+    containerPosts: document.querySelector('.posts'),
+    modalWindow: document.querySelector('#modal'),
+    input: document.querySelector('input[name="url"]'),
+  };
   const defaultLanguage = 'ru';
   const state = onChange({
     lng: defaultLanguage,
@@ -15,10 +23,10 @@ const application = () => {
       feeds: [],
       posts: [],
     },
-  }, (path, currentValue, prevValue) => render(state, path, currentValue, prevValue));
+  }, (path, currentValue, prevValue) => render(state, path, currentValue, prevValue, elements));
 
-  controllerSubmit(state);
-  controllerClick(state);
+  controllerSubmit(state, elements);
+  controllerClick(state, elements);
 };
 
 export default application;

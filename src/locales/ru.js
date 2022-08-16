@@ -1,11 +1,13 @@
 export default {
   translation: {
-    errURL: 'должен быть действительный URL-адрес',
-    errRequired: 'Вы пропустили это поле',
+    loading: 'идет загрузка',
+    errURL: 'Ссылка должна быть валидным URL',
+    errRequired: 'Не должно быть пустым',
     repleated: 'RSS уже существует',
     success: 'RSS успешно загружен',
     feeds: 'Фиды',
     posts: 'Посты',
     vewing: 'Просмотр',
+    noValid: 'Ресурс не содержит валидный RSS',
   },
 };

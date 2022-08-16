@@ -1,6 +1,5 @@
-export default (state) => {
-  const container = document.querySelector('.posts');
-  container.addEventListener('click', (e) => {
+export default (state, elements) => {
+  elements.containerPosts.addEventListener('click', (e) => {
     const { id } = e.target.dataset;
     state.useId.push(id);
     if (e.target.type === 'submit') {

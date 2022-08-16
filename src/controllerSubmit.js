@@ -4,13 +4,13 @@ import parserData from './parser.js';
 import i18nInstance from './locales/interpreter.js';
 import checkList from './checkList.js';
 
-export default (state) => {
+export default (state, elements) => {
   const schema = yup.string().trim()
     .url(i18nInstance(state.lng, 'errURL'))
     .required(i18nInstance(state.lng, 'errRequired'))
     .notOneOf([state.data.urls], i18nInstance(state.lng, 'repleated'));
 
-  const check = () => {
+  const checkNewPost = () => {
     setTimeout(() => {
       checkList(state.data.urls, state.data.posts)
         .forEach((promise) => promise
@@ -20,13 +20,13 @@ export default (state) => {
             });
             state.data.posts.push(...filtrData);
           }));
-      check();
+      checkNewPost();
     }, 5000);
   };
 
-  const form = document.querySelector('.rss-form');
-  form.addEventListener('submit', (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
+    elements.submit.disabled = false;
     const formData = new FormData(e.target);
     const url = formData.get('url');
     schema.validate(url)
@@ -46,5 +46,5 @@ export default (state) => {
         state.error = err;
       });
   });
-  check();
+  checkNewPost();
 };
