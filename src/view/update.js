@@ -16,8 +16,9 @@ export default (posts, i18Vewing) => {
     aEl.setAttribute('href', post.link);
     aEl.setAttribute('target', '_blank');
     aEl.setAttribute('data-id', post.id);
-    buttonEl.setAttribute('data-toggle', 'modal');
-    buttonEl.setAttribute('data-id', post.id);
+    buttonEl.dataset.bsToggle = 'modal';
+    buttonEl.dataset.bsTarget = '#modal';
+    buttonEl.dataset.id = post.id;
     aEl.textContent = post.title;
     buttonEl.textContent = i18Vewing;
     liEl.append(divContainer);
