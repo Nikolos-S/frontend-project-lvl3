@@ -1,20 +1,24 @@
 import onChange from 'on-change';
 import render from './view/index.js';
-import controller from './controller.js';
+import controllerSubmit from './controllerSubmit.js';
+import controllerClick from './controllerClick.js';
 
 const application = () => {
   const defaultLanguage = 'ru';
   const state = onChange({
     lng: defaultLanguage,
     error: null,
+    useId: [],
+    currentPost: null,
     data: {
       urls: [],
       feeds: [],
       posts: [],
     },
-  }, render(defaultLanguage));
+  }, (path, currentValue, prevValue) => render(state, path, currentValue, prevValue));
 
-  controller(state);
+  controllerSubmit(state);
+  controllerClick(state);
 };
 
 export default application;

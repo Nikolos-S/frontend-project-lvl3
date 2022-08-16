@@ -1,6 +1,5 @@
 export default (posts, i18Vewing) => {
   const ulEl = document.querySelector('ul');
-  ulEl.innerHTML = '';
   posts.forEach((post) => {
     const liEl = document.createElement('li');
     const aEl = document.createElement('a');
@@ -16,7 +15,9 @@ export default (posts, i18Vewing) => {
     liEl.classList.add('list-group-item', 'border-0', 'border-end-0');
     aEl.setAttribute('href', post.link);
     aEl.setAttribute('target', '_blank');
+    aEl.setAttribute('data-id', post.id);
     buttonEl.setAttribute('data-toggle', 'modal');
+    buttonEl.setAttribute('data-id', post.id);
     aEl.textContent = post.title;
     buttonEl.textContent = i18Vewing;
     liEl.append(divContainer);

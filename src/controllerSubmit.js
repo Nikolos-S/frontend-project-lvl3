@@ -12,9 +12,12 @@ export default (state) => {
 
   const check = () => {
     setTimeout(() => {
-      checkList(state.data.urls, state.data.posts, state.data.feeds)
+      checkList(state.data.urls, state.data.posts)
         .forEach((promise) => promise
           .then((filtrData) => {
+            filtrData.forEach((post) => {
+              post.id = uniqueId();
+            });
             state.data.posts.push(...filtrData);
           }));
       check();
@@ -32,10 +35,8 @@ export default (state) => {
           state.error = error;
         }).then((promiseNormalizeData) => {
           const [feedData, postsData] = promiseNormalizeData;
-          const idFeed = uniqueId();
-          feedData.id = idFeed;
           postsData.forEach((post) => {
-            post.feedId = idFeed;
+            post.id = uniqueId();
           });
           state.data.feeds.push(feedData);
           state.data.posts.push(...postsData);
