@@ -3,12 +3,12 @@ import renderNoValid from './renderNoValid.js';
 import buildPosts from './buildPosts.js';
 import renderUse from './renderUse.js';
 import renderModal from './renderModal.js';
-import renderLoading from './renderLoading.js';
+// import renderLoading from './renderLoading.js';
 
 const render = (state, path, currentValue, prevValue, elements) => {
   switch (path) {
-    case 'loading':
-      return renderLoading(currentValue, elements);
+    // case 'loading':
+    // return renderLoading(currentValue, elements);
     case 'data.feeds':
       return renderVAlid(currentValue, state.lng, elements);
     case 'data.posts':
