@@ -6,7 +6,10 @@ import controllerClick from './controllerClick.js';
 const application = () => {
   const elements = {
     form: document.querySelector('.rss-form'),
-    submit: document.querySelector('[type="submit"]'),
+    block: {
+      submit: document.querySelector('[type="submit"]'),
+      input: document.querySelector('#url-input'),
+    },
     containerFeeds: document.querySelector('.feeds'),
     containerPosts: document.querySelector('.posts'),
     modalWindow: document.querySelector('#modal'),
@@ -15,6 +18,7 @@ const application = () => {
   const defaultLanguage = 'ru';
   const state = onChange({
     lng: defaultLanguage,
+    loading: null,
     error: null,
     useId: [],
     currentPost: null,

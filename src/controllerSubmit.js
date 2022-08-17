@@ -26,7 +26,8 @@ export default (state, elements) => {
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    elements.submit.disabled = false;
+    elements.block.submit.disabled = false;
+    elements.block.input.disabled = false;
     const formData = new FormData(e.target);
     const url = formData.get('url');
     schema.validate(url)
@@ -34,6 +35,7 @@ export default (state, elements) => {
         parserData(url, i18nInstance(state.lng, 'netErr')).catch((error) => {
           state.error = error;
         }).then((promiseNormalizeData) => {
+          state.loading = i18nInstance(state.lng, 'loading');
           const [feedData, postsData] = promiseNormalizeData;
           postsData.forEach((post) => {
             post.id = uniqueId();
