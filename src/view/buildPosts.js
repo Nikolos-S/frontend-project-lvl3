@@ -3,6 +3,7 @@ import i18nInstance from '../locales/interpreter.js';
 import filterData from '../filtresData.js';
 
 export default (posts, prevPosts, lng, elements) => {
+  elements.block.submit.disabled = false;
   if (!elements.containerPosts.querySelector('ul')) {
     elements.containerPosts.innerHTML = `<div><div><h2>${i18nInstance(lng, 'posts')}</h2></div><ul></ul></div>`;
     const divBorder = elements.containerPosts.querySelector('div');

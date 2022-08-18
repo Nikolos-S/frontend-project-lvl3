@@ -26,8 +26,8 @@ export default (state, elements) => {
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    elements.block.submit.disabled = false;
-    elements.block.input.disabled = false;
+    elements.block.submit.disabled = true;
+    // elements.block.input.disabled = true;
     const formData = new FormData(e.target);
     const url = formData.get('url');
     schema.validate(url)

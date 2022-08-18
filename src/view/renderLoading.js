@@ -5,5 +5,4 @@ export default (message, elements) => {
   pEl.classList.add('text-info');
   pEl.textContent = message;
   parent.replaceChild(pEl, parent.querySelector('.feedback'));
-  console.log(pEl);
 };
