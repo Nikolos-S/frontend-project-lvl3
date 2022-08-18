@@ -1,6 +1,7 @@
 import i18nInstance from '../locales/interpreter.js';
 
 export default (error, lng, elements) => {
+  elements.block.submit.disabled = false;
   elements.input.value = '';
   elements.input.focus();
   const parent = elements.input.closest('.text-white');
