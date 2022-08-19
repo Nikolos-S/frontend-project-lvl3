@@ -18,7 +18,7 @@ const application = () => {
   const defaultLanguage = 'ru';
   const state = onChange({
     lng: defaultLanguage,
-    loading: null,
+    processState: 'filling',
     error: null,
     useId: [],
     currentPost: null,
