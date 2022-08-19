@@ -27,7 +27,6 @@ export default (state, elements) => {
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     elements.block.submit.disabled = true;
-    // elements.block.input.disabled = true;
     state.processState = 'sending';
     const formData = new FormData(e.target);
     const url = formData.get('url');
@@ -35,7 +34,7 @@ export default (state, elements) => {
       .then(() => {
         parserData(url, i18nInstance(state.lng, 'netErr')).catch((error) => {
           state.error = error;
-          state.processState = 'error';
+          state.processState = 'error'; // в случае, если валидный url, но не rss канал.
         }).then((promiseNormalizeData) => {
           const [feedData, postsData] = promiseNormalizeData;
           postsData.forEach((post) => {

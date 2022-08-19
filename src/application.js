@@ -8,7 +8,6 @@ const application = () => {
     form: document.querySelector('.rss-form'),
     block: {
       submit: document.querySelector('[type="submit"]'),
-      input: document.querySelector('#url-input'),
     },
     containerFeeds: document.querySelector('.feeds'),
     containerPosts: document.querySelector('.posts'),
