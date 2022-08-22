@@ -1,10 +1,10 @@
-export default (state, elements) => {
+export default (state, elements, watchedState) => {
   elements.containerPosts.addEventListener('click', (e) => {
     const { id } = e.target.dataset;
-    state.useId.push(id);
+    watchedState.viewedLinkIds.add(id);
     if (e.target.type === 'submit') {
       const post = state.data.posts.filter((el) => el.id === id);
-      state.currentPost = post;
+      watchedState.currentPost = post;
     }
   });
 };

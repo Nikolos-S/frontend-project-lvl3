@@ -1,5 +1,5 @@
-import onChange from 'on-change';
-import render from './view/index.js';
+// import onChange from 'on-change';
+import watch from './view/index.js';
 import controllerSubmit from './controllerSubmit.js';
 import controllerClick from './controllerClick.js';
 
@@ -15,21 +15,23 @@ const application = () => {
     input: document.querySelector('input[name="url"]'),
   };
   const defaultLanguage = 'ru';
-  const state = onChange({
+  const state = {
     lng: defaultLanguage,
     processState: 'filling',
     error: null,
-    useId: [],
+    viewedLinkIds: new Set(),
     currentPost: null,
     data: {
       urls: [],
       feeds: [],
       posts: [],
     },
-  }, (path, currentValue, prevValue) => render(state, path, currentValue, prevValue, elements));
+  };
 
-  controllerSubmit(state, elements);
-  controllerClick(state, elements);
+  const watchedState = watch(state, elements);
+
+  controllerSubmit(state, elements, watchedState);
+  controllerClick(state, elements, watchedState);
 };
 
 export default application;

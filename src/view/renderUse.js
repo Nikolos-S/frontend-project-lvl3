@@ -1,9 +1,8 @@
 export default (id) => {
-  const useHref = document.querySelectorAll('a[data-id]');
-  useHref.forEach((href) => {
-    if (id.includes(href.dataset.id)) {
+  const useHref = new Array(...document.querySelectorAll('a[data-id]'));
+  useHref.filter((link) => id.has(link.dataset.id))
+    .forEach((href) => {
       href.classList.remove('fw-bold');
       href.classList.add('fw-normal');
-    }
-  });
+    });
 };

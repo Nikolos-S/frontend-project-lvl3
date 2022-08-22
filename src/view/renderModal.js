@@ -1,9 +1,8 @@
-export default (proxyPost, elements) => {
+export default (post, elements) => {
   const title = elements.modalWindow.querySelector('h5');
   const description = elements.modalWindow.querySelector('.modal-body');
-  const activePost = JSON.parse(JSON.stringify(proxyPost))[0];
-  title.textContent = activePost.title;
-  description.textContent = activePost.description;
+  title.textContent = post.title;
+  description.textContent = post.description;
   const aEl = elements.modalWindow.querySelector('a');
-  aEl.setAttribute('href', activePost.link);
+  aEl.setAttribute('href', post.link);
 };
