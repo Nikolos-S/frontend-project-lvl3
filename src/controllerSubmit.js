@@ -1,8 +1,8 @@
 import * as yup from 'yup';
 import uniqueId from 'lodash/uniqueId.js';
-import getNetworkRequest from './networkRequest.js';
+import getNetworkRequest from './utilityPrograms/networkRequest.js';
 import i18nInstance from './locales/interpreter.js';
-import checkList from './checkList.js';
+import checkList from './utilityPrograms/checkList.js';
 
 export default (state, elements, watchedState) => {
   const schema = yup.string().trim()

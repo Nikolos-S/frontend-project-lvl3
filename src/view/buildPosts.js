@@ -1,6 +1,9 @@
 import update from './update.js';
 import i18nInstance from '../locales/interpreter.js';
-import filterData from '../filtresData.js';
+
+const filterData = (currentPost, posts) => currentPost
+  .filter((element) => posts
+    .findIndex((el) => el.title === element.title) === -1);
 
 export default (posts, prevPosts, lng, elements) => {
   if (!elements.containerPosts.querySelector('ul')) {

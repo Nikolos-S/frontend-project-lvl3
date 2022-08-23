@@ -1,4 +1,4 @@
-import i18nInstance from './locales/interpreter.js';
+import i18nInstance from '../locales/interpreter.js';
 
 const parserData = (url, document, lng) => {
   const parser = new DOMParser();

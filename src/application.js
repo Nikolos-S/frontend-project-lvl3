@@ -1,4 +1,3 @@
-// import onChange from 'on-change';
 import watch from './view/index.js';
 import controllerSubmit from './controllerSubmit.js';
 import controllerClick from './controllerClick.js';

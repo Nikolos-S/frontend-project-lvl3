@@ -1,12 +1,14 @@
-// import parserData from './parser.js';
 import getNetworkRequest from './networkRequest.js';
-import filterData from './filtresData.js';
 
 // Деструктируем данные, формирующиеся в парсере, чтобы достать посты
 const splitData = (url, netErr) => getNetworkRequest(url, netErr).then((promise) => {
   const [, postsData] = promise;
   return postsData;
 });
+
+const filterData = (currentPost, posts) => currentPost
+  .filter((element) => posts
+    .findIndex((el) => el.title === element.title) === -1);
 
 const checkList = (urls, posts, netErr) => {
   const parseUrls = urls

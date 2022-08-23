@@ -8,14 +8,16 @@ export default (processState, elements, state) => {
     elements.input.classList.remove('is-invalid');
     pEl.classList.add('text-info');
     pEl.textContent = i18nInstance(state.lng, 'loading');
-  } else if (processState === 'sent') {
+  }
+  if (processState === 'sent') {
     elements.input.value = '';
     elements.input.focus();
     elements.block.submit.disabled = false;
     elements.input.classList.remove('is-invalid');
     pEl.classList.add('text-success');
     pEl.textContent = i18nInstance(state.lng, 'success');
-  } else if (processState === 'error') {
+  }
+  if (processState === 'error') {
     elements.input.value = '';
     elements.input.focus();
     elements.block.submit.disabled = false;
