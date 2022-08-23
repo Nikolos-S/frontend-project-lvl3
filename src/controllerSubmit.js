@@ -1,6 +1,5 @@
 import * as yup from 'yup';
 import uniqueId from 'lodash/uniqueId.js';
-import isEmpty from 'lodash/isEmpty.js';
 import getNetworkRequest from './networkRequest.js';
 import i18nInstance from './locales/interpreter.js';
 import checkList from './checkList.js';
@@ -33,30 +32,23 @@ export default (state, elements, watchedState) => {
     const url = formData.get('url');
     schema.validate(url)
       .then(() => {
-        getNetworkRequest(url, i18nInstance(state.lng, 'netErr')).then((promiseNormalizeData) => {
-          if (isEmpty(promiseNormalizeData)) {
-            watchedState.error = promiseNormalizeData;
-            watchedState.processState = 'error';
-          } else {
-            const [feedData, postsData] = promiseNormalizeData;
-            postsData.forEach((post) => {
-              post.id = uniqueId();
-            });
-            watchedState.data.feeds.push(feedData);
-            watchedState.data.posts.push(...postsData);
-            watchedState.data.urls.push(feedData.urlFeed);
-            watchedState.processState = 'sent';
-          }
+        getNetworkRequest(url, state.lng).then((promiseNormalizeData) => {
+          const [feedData, postsData] = promiseNormalizeData;
+          postsData.forEach((post) => {
+            post.id = uniqueId();
+          });
+          watchedState.data.feeds.push(feedData);
+          watchedState.data.posts.push(...postsData);
+          watchedState.data.urls.push(feedData.urlFeed);
+          watchedState.processState = 'sent';
+        }).catch((rssErr) => {
+          watchedState.error = rssErr.message;
+          watchedState.processState = 'error';
         });
       }).catch((err) => {
-        watchedState.error = err;
+        watchedState.error = err.message;
         watchedState.processState = 'error';
       });
   });
   checkNewPost();
 };
-
-/*
-watchedState.error = error;
-watchedState.processState = 'error'; // в случае, если валидный url, но не является rss каналом.
-*/

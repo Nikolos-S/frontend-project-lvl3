@@ -21,7 +21,7 @@ export default (processState, elements, state) => {
     elements.block.submit.disabled = false;
     elements.input.classList.add('is-invalid');
     pEl.classList.add('text-danger');
-    pEl.textContent = (state.error.message !== 'Cannot read properties of null (reading \'textContent\')') ? state.error.message : i18nInstance(state.lng, 'noValid');
+    pEl.textContent = state.error;
   }
   parent.replaceChild(pEl, parent.querySelector('.feedback'));
 };
