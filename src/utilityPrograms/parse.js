@@ -1,4 +1,4 @@
-const parserData = (url, document, i18nInstance) => {
+const parse = (url, document, i18nInstance) => {
   const parser = new DOMParser();
   const domRss = parser.parseFromString(document.contents, 'text/xml');
   if (domRss.querySelector('parsererror')) {
@@ -25,4 +25,4 @@ const parserData = (url, document, i18nInstance) => {
   return [feedData, postsData];
 };
 
-export default parserData;
+export default parse;

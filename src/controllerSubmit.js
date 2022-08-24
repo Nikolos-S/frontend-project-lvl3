@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import uniqueId from 'lodash/uniqueId.js';
 import getNetworkRequest from './utilityPrograms/networkRequest.js';
-import checkList from './utilityPrograms/checkList.js';
+import checkNewPosts from './utilityPrograms/checkNewPosts.js';
 
 export default (state, elements, watchedState, i18nInstance) => {
   const schema = yup.string().trim()
@@ -11,7 +11,7 @@ export default (state, elements, watchedState, i18nInstance) => {
 
   const checkNewPost = () => {
     setTimeout(() => {
-      checkList(state.data.urls, state.data.posts, i18nInstance)
+      checkNewPosts(state.data.urls, state.data.posts, i18nInstance)
         .forEach((promise) => promise
           .then((filtrData) => {
             filtrData.forEach((post) => {

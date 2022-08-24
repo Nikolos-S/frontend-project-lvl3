@@ -6,15 +6,15 @@ const splitData = (url, i18nInstance) => getNetworkRequest(url, i18nInstance).th
   return postsData;
 });
 
-const filterData = (currentPost, posts) => currentPost
-  .filter((element) => posts
+const getNewPosts = (newPost, prevPosts) => newPost
+  .filter((element) => prevPosts
     .findIndex((el) => el.title === element.title) === -1);
 
-const checkList = (urls, posts, i18nInstance) => {
-  const parseUrls = urls
+const checkNewPosts = (urls, prevPosts, i18nInstance) => {
+  const newPosts = urls
     .reduce((acc, url) => [...acc, splitData(url, i18nInstance)
-      .then((promise) => filterData(promise, posts))], []);
-  return parseUrls;
+      .then((promise) => getNewPosts(promise, prevPosts))], []);
+  return newPosts;
 };
 
-export default checkList;
+export default checkNewPosts;
