@@ -9,17 +9,16 @@ export default (state, elements, watchedState, i18nInstance) => {
     .required(i18nInstance.t('errRequired'))
     .notOneOf([state.data.urls], i18nInstance.t('repleated'));
 
-  const checkNewPost = () => {
+  const updateListPosts = (url) => {
     setTimeout(() => {
-      checkNewPosts(state.data.urls, state.data.posts, i18nInstance)
-        .forEach((promise) => promise
-          .then((filtrData) => {
-            filtrData.forEach((post) => {
-              post.id = uniqueId();
-            });
-            watchedState.data.posts.push(...filtrData);
-          }));
-      checkNewPost();
+      checkNewPosts(url, state.data.posts, i18nInstance)
+        .then((newPosts) => {
+          newPosts.forEach((post) => {
+            post.id = uniqueId();
+          });
+          watchedState.data.posts.push(...newPosts);
+        });
+      updateListPosts(url);
     }, 5000);
   };
 
@@ -40,6 +39,7 @@ export default (state, elements, watchedState, i18nInstance) => {
           watchedState.data.posts.push(...postsData);
           watchedState.data.urls.push(feedData.urlFeed);
           watchedState.processState = 'sent';
+          updateListPosts(url);
         }).catch((rssErr) => {
           watchedState.error = rssErr.message;
           watchedState.processState = 'error';
@@ -49,5 +49,4 @@ export default (state, elements, watchedState, i18nInstance) => {
         watchedState.processState = 'error';
       });
   });
-  checkNewPost();
 };

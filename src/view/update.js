@@ -1,4 +1,4 @@
-export default (posts, i18nInstance) => {
+const updatePosts = (posts, i18nInstance) => {
   const ulEl = document.querySelector('ul');
   posts.forEach((post) => {
     const liEl = document.createElement('li');
@@ -20,3 +20,5 @@ export default (posts, i18nInstance) => {
     ulEl.append(liEl);
   });
 };
+
+export default updatePosts;

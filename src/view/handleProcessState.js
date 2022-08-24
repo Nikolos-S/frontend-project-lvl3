@@ -1,4 +1,4 @@
-export default (processState, i18nInstance, elements, error) => {
+const handleProcwssState = (processState, i18nInstance, elements, error) => {
   const parent = elements.input.closest('.text-white');
   const pEl = document.createElement('p');
   pEl.classList.add('feedback', 'm-0', 'position-absolute', 'small');
@@ -25,3 +25,5 @@ export default (processState, i18nInstance, elements, error) => {
   }
   parent.replaceChild(pEl, parent.querySelector('.feedback'));
 };
+
+export default handleProcwssState;

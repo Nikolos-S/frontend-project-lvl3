@@ -1,4 +1,4 @@
-export default (feeds, i18nInstance, elements) => {
+const buildFeed = (feeds, i18nInstance, elements) => {
   const container = elements.containerFeeds;
   container.innerHTML = `<div><div><h2>${i18nInstance.t('feeds')}</h2></div><ul></ul></div>`;
   const listFeed = feeds.reduce((acc, feed) => `${acc}<li><h3>${feed.titleFeed}</h3><p>${feed.descriptionFeed}</p></li>`, '');
@@ -13,3 +13,5 @@ export default (feeds, i18nInstance, elements) => {
   container.querySelectorAll('h3').forEach((hEl) => hEl.classList.add('h6', 'm-0'));
   container.querySelectorAll('p').forEach((pEl) => pEl.classList.add('m-0', 'small', 'text-black-50'));
 };
+
+export default buildFeed;

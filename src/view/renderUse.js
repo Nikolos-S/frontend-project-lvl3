@@ -1,4 +1,4 @@
-export default (id) => {
+const renderUse = (id) => {
   const useHref = new Array(...document.querySelectorAll('a[data-id]'));
   useHref.filter((link) => id.has(link.dataset.id))
     .forEach((href) => {
@@ -6,3 +6,4 @@ export default (id) => {
       href.classList.add('fw-normal');
     });
 };
+export default renderUse;

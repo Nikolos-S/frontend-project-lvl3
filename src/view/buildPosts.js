@@ -1,10 +1,10 @@
-import update from './update.js';
+import updatePosts from './update.js';
 
 const getNewPosts = (newPost, prevPosts) => newPost
   .filter((element) => prevPosts
     .findIndex((el) => el.title === element.title) === -1);
 
-export default (newPosts, prevPosts, i18nInstance, elements) => {
+const buildPosts = (newPosts, prevPosts, i18nInstance, elements) => {
   if (!elements.containerPosts.querySelector('ul')) {
     elements.containerPosts.innerHTML = `<div><div><h2>${i18nInstance.t('posts')}</h2></div><ul></ul></div>`;
     const divBorder = elements.containerPosts.querySelector('div');
@@ -16,5 +16,7 @@ export default (newPosts, prevPosts, i18nInstance, elements) => {
     ulEl.classList.add('list-group', 'border-0', 'rounded-0');
   }
   const currentPost = getNewPosts(newPosts, prevPosts);
-  update(currentPost, i18nInstance);
+  updatePosts(currentPost, i18nInstance);
 };
+
+export default buildPosts;
