@@ -5,15 +5,15 @@ import renderUse from './renderUse.js';
 import renderModal from './renderModal.js';
 import handleProcessState from './handleProcessState.js';
 
-const watch = (state, elements) => {
+const watch = (state, elements, i18nInstance) => {
   const render = onChange(state, (path, currentValue, prevValue) => {
     switch (path) {
       case 'processState':
-        return handleProcessState(currentValue, elements, state);
+        return handleProcessState(currentValue, i18nInstance, elements, state.error);
       case 'data.feeds':
-        return buildFeed(currentValue, state.lng, elements);
+        return buildFeed(currentValue, i18nInstance, elements);
       case 'data.posts':
-        return buildPosts(currentValue, prevValue, state.lng, elements);
+        return buildPosts(currentValue, prevValue, i18nInstance, elements);
       case 'viewedLinkIds':
         return renderUse(currentValue);
       case 'currentPost':

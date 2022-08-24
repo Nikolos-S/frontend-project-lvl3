@@ -1,13 +1,11 @@
-import i18nInstance from '../locales/interpreter.js';
-
-export default (processState, elements, state) => {
+export default (processState, i18nInstance, elements, error) => {
   const parent = elements.input.closest('.text-white');
   const pEl = document.createElement('p');
   pEl.classList.add('feedback', 'm-0', 'position-absolute', 'small');
   if (processState === 'sending') {
     elements.input.classList.remove('is-invalid');
     pEl.classList.add('text-info');
-    pEl.textContent = i18nInstance(state.lng, 'loading');
+    pEl.textContent = i18nInstance.t('loading');
   }
   if (processState === 'sent') {
     elements.input.value = '';
@@ -15,7 +13,7 @@ export default (processState, elements, state) => {
     elements.block.submit.disabled = false;
     elements.input.classList.remove('is-invalid');
     pEl.classList.add('text-success');
-    pEl.textContent = i18nInstance(state.lng, 'success');
+    pEl.textContent = i18nInstance.t('success');
   }
   if (processState === 'error') {
     elements.input.value = '';
@@ -23,7 +21,7 @@ export default (processState, elements, state) => {
     elements.block.submit.disabled = false;
     elements.input.classList.add('is-invalid');
     pEl.classList.add('text-danger');
-    pEl.textContent = state.error;
+    pEl.textContent = error;
   }
   parent.replaceChild(pEl, parent.querySelector('.feedback'));
 };

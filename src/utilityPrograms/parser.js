@@ -1,10 +1,8 @@
-import i18nInstance from '../locales/interpreter.js';
-
-const parserData = (url, document, lng) => {
+const parserData = (url, document, i18nInstance) => {
   const parser = new DOMParser();
   const domRss = parser.parseFromString(document.contents, 'text/xml');
   if (domRss.querySelector('parsererror')) {
-    throw new Error(i18nInstance(lng, 'noValid'));
+    throw new Error(i18nInstance.t('noValid'));
   }
   const title = domRss.querySelector('title').textContent;
   const description = domRss.querySelector('description').textContent;

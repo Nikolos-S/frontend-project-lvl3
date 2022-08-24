@@ -1,8 +1,6 @@
-import i18nInstance from '../locales/interpreter.js';
-
-export default (feeds, lng, elements) => {
+export default (feeds, i18nInstance, elements) => {
   const container = elements.containerFeeds;
-  container.innerHTML = `<div><div><h2>${i18nInstance(lng, 'feeds')}</h2></div><ul></ul></div>`;
+  container.innerHTML = `<div><div><h2>${i18nInstance.t('feeds')}</h2></div><ul></ul></div>`;
   const listFeed = feeds.reduce((acc, feed) => `${acc}<li><h3>${feed.titleFeed}</h3><p>${feed.descriptionFeed}</p></li>`, '');
   container.querySelector('ul').innerHTML = listFeed;
   const divBorder = container.querySelector('div');

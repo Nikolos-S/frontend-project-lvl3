@@ -1,18 +1,17 @@
 import * as yup from 'yup';
 import uniqueId from 'lodash/uniqueId.js';
 import getNetworkRequest from './utilityPrograms/networkRequest.js';
-import i18nInstance from './locales/interpreter.js';
 import checkList from './utilityPrograms/checkList.js';
 
-export default (state, elements, watchedState) => {
+export default (state, elements, watchedState, i18nInstance) => {
   const schema = yup.string().trim()
-    .url(i18nInstance(state.lng, 'errURL'))
-    .required(i18nInstance(state.lng, 'errRequired'))
-    .notOneOf([state.data.urls], i18nInstance(state.lng, 'repleated'));
+    .url(i18nInstance.t('errURL'))
+    .required(i18nInstance.t('errRequired'))
+    .notOneOf([state.data.urls], i18nInstance.t('repleated'));
 
   const checkNewPost = () => {
     setTimeout(() => {
-      checkList(state.data.urls, state.data.posts, i18nInstance(state.lng, 'netErr'))
+      checkList(state.data.urls, state.data.posts, i18nInstance)
         .forEach((promise) => promise
           .then((filtrData) => {
             filtrData.forEach((post) => {
@@ -32,7 +31,7 @@ export default (state, elements, watchedState) => {
     const url = formData.get('url');
     schema.validate(url)
       .then(() => {
-        getNetworkRequest(url, state.lng).then((promiseNormalizeData) => {
+        getNetworkRequest(url, i18nInstance).then((promiseNormalizeData) => {
           const [feedData, postsData] = promiseNormalizeData;
           postsData.forEach((post) => {
             post.id = uniqueId();

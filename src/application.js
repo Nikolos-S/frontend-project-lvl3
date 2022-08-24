@@ -1,4 +1,6 @@
+import i18n from 'i18next';
 import watch from './view/index.js';
+import resources from './locales/index.js';
 import controllerSubmit from './controllerSubmit.js';
 import controllerClick from './controllerClick.js';
 
@@ -14,6 +16,11 @@ const application = () => {
     input: document.querySelector('input[name="url"]'),
   };
   const defaultLanguage = 'ru';
+  const i18nInstance = i18n.createInstance();
+  i18nInstance.init({
+    lng: defaultLanguage,
+    resources,
+  });
   const state = {
     lng: defaultLanguage,
     processState: 'filling',
@@ -27,9 +34,9 @@ const application = () => {
     },
   };
 
-  const watchedState = watch(state, elements);
+  const watchedState = watch(state, elements, i18nInstance);
 
-  controllerSubmit(state, elements, watchedState);
+  controllerSubmit(state, elements, watchedState, i18nInstance);
   controllerClick(state, elements, watchedState);
 };
 

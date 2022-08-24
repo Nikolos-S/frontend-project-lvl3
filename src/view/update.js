@@ -1,4 +1,4 @@
-export default (posts, i18Vewing) => {
+export default (posts, i18nInstance) => {
   const ulEl = document.querySelector('ul');
   posts.forEach((post) => {
     const liEl = document.createElement('li');
@@ -14,7 +14,7 @@ export default (posts, i18Vewing) => {
     buttonEl.dataset.bsTarget = '#modal';
     buttonEl.dataset.id = post.id;
     aEl.textContent = post.title;
-    buttonEl.textContent = i18Vewing;
+    buttonEl.textContent = i18nInstance.t('vewing');
     liEl.append(aEl);
     liEl.append(buttonEl);
     ulEl.append(liEl);
