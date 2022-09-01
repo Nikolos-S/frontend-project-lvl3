@@ -16,7 +16,6 @@ const handleProcwssState = (processState, i18nInstance, elements, error) => {
     pEl.textContent = i18nInstance.t('success');
   }
   if (processState === 'error') {
-    elements.input.value = '';
     elements.input.focus();
     elements.block.submit.disabled = false;
     elements.input.classList.add('is-invalid');

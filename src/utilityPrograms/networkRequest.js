@@ -2,7 +2,8 @@ import axios from 'axios';
 import parse from './parse.js';
 
 const getNetworkRequest = (url, i18nInstance) => {
-  const newUrl = new URL('https://allorigins.hexlet.app/get?disableCache=true&url');
+  const newUrl = new URL('https://allorigins.hexlet.app/get?');
+  newUrl.search = 'disableCache=true';
   newUrl.search = `disableCache=true&url=${encodeURIComponent(url)}`;
   const document = axios.get(newUrl)
     .then((response) => response.data)

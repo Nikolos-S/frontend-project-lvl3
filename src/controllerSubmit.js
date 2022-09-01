@@ -4,7 +4,7 @@ import getNetworkRequest from './utilityPrograms/networkRequest.js';
 import checkNewPosts from './utilityPrograms/checkNewPosts.js';
 
 export default (state, elements, watchedState, i18nInstance) => {
-  const schema = yup.string().trim()
+  const schema = yup.string()
     .url(i18nInstance.t('errURL'))
     .required(i18nInstance.t('errRequired'))
     .notOneOf([state.data.urls], i18nInstance.t('repleated'));
