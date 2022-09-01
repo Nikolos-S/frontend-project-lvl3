@@ -1,18 +1,13 @@
 import getNetworkRequest from './networkRequest.js';
-
-// Деструктируем данные, формирующиеся в парсере, чтобы достать посты
-const splitData = (url, i18nInstance) => getNetworkRequest(url, i18nInstance).then((promise) => {
-  const [, postsData] = promise;
-  return postsData;
-});
-
-const getNewPosts = (newPost, prevPosts) => newPost
-  .filter((element) => prevPosts
-    .findIndex((el) => el.title === element.title) === -1);
+import parse from './parse.js';
 
 const checkNewPosts = (url, prevPosts, i18nInstance) => {
-  const newPosts = splitData(url, i18nInstance)
-    .then((promise) => getNewPosts(promise, prevPosts));
+  const newPosts = getNetworkRequest(url, i18nInstance).then((promise) => {
+    const [, postsData] = parse(url, promise);
+    return postsData;
+  })
+    .then((promise) => promise.filter((post) => prevPosts
+      .findIndex((prevPost) => prevPost.title === post.title) === -1));
   return newPosts;
 };
 

@@ -1,16 +1,14 @@
 import axios from 'axios';
-import parse from './parse.js';
 
-const getNetworkRequest = (url, i18nInstance) => {
-  const newUrl = new URL('https://allorigins.hexlet.app/get?');
-  newUrl.search = 'disableCache=true';
-  newUrl.search = `disableCache=true&url=${encodeURIComponent(url)}`;
-  const document = axios.get(newUrl)
+const getNetworkRequest = (url) => {
+  const urlWithProxy = new URL('/get', 'https://allorigins.hexlet.app');
+  urlWithProxy.searchParams.set('disableCache', 'true');
+  urlWithProxy.searchParams.set('url', url);
+  const document = axios.get(urlWithProxy)
     .then((response) => response.data)
     .catch(() => {
-      throw new Error(i18nInstance.t('netErr'));
-    })
-    .then((data) => parse(url, data, i18nInstance));
+      throw new Error('netErr');
+    });
   return document;
 };
 

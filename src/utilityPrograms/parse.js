@@ -1,8 +1,8 @@
-const parse = (url, document, i18nInstance) => {
+const parse = (url, document) => {
   const parser = new DOMParser();
   const domRss = parser.parseFromString(document.contents, 'text/xml');
   if (domRss.querySelector('parsererror')) {
-    throw new Error(i18nInstance.t('noValid'));
+    throw new Error('noValid');
   }
   const title = domRss.querySelector('title').textContent;
   const description = domRss.querySelector('description').textContent;

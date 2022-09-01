@@ -2,23 +2,24 @@ import * as yup from 'yup';
 import uniqueId from 'lodash/uniqueId.js';
 import getNetworkRequest from './utilityPrograms/networkRequest.js';
 import checkNewPosts from './utilityPrograms/checkNewPosts.js';
+import parse from './utilityPrograms/parse.js';
 
-export default (state, elements, watchedState, i18nInstance) => {
+export default (state, elements, watchedState) => {
   const schema = yup.string()
-    .url(i18nInstance.t('errURL'))
-    .required(i18nInstance.t('errRequired'))
-    .notOneOf([state.data.urls], i18nInstance.t('repleated'));
+    .url('errURL')
+    .required('errRequired')
+    .notOneOf([state.data.urls], 'repleated');
 
   const updateListPosts = (url) => {
     setTimeout(() => {
-      checkNewPosts(url, state.data.posts, i18nInstance)
+      checkNewPosts(url, state.data.posts)
         .then((newPosts) => {
           newPosts.forEach((post) => {
             post.id = uniqueId();
           });
           watchedState.data.posts.push(...newPosts);
-        });
-      updateListPosts(url);
+        })
+        .finally(updateListPosts(url));
     }, 5000);
   };
 
@@ -30,7 +31,7 @@ export default (state, elements, watchedState, i18nInstance) => {
     const url = formData.get('url');
     schema.validate(url)
       .then(() => {
-        getNetworkRequest(url, i18nInstance).then((promiseNormalizeData) => {
+        getNetworkRequest(url).then((data) => parse(url, data)).then((promiseNormalizeData) => {
           const [feedData, postsData] = promiseNormalizeData;
           postsData.forEach((post) => {
             post.id = uniqueId();
@@ -39,7 +40,6 @@ export default (state, elements, watchedState, i18nInstance) => {
           watchedState.data.posts.push(...postsData);
           watchedState.data.urls.push(feedData.urlFeed);
           watchedState.processState = 'sent';
-          updateListPosts(url);
         }).catch((rssErr) => {
           watchedState.error = rssErr.message;
           watchedState.processState = 'error';
@@ -48,5 +48,6 @@ export default (state, elements, watchedState, i18nInstance) => {
         watchedState.error = err.message;
         watchedState.processState = 'error';
       });
+    updateListPosts(url);
   });
 };

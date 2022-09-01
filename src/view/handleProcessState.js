@@ -20,7 +20,7 @@ const handleProcwssState = (processState, i18nInstance, elements, error) => {
     elements.block.submit.disabled = false;
     elements.input.classList.add('is-invalid');
     pEl.classList.add('text-danger');
-    pEl.textContent = error;
+    pEl.textContent = i18nInstance.t(error);
   }
   parent.replaceChild(pEl, parent.querySelector('.feedback'));
 };
