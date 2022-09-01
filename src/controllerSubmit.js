@@ -11,16 +11,18 @@ export default (state, elements, watchedState) => {
     .notOneOf([state.data.urls], 'repleated');
 
   const updateListPosts = (url) => {
-    const newPosts = checkNewPosts(url, state.data.posts)
+    checkNewPosts(url, state.data.posts)
       .then((list) => {
         list.forEach((post) => {
           post.id = uniqueId();
         });
         watchedState.data.posts.push(...list);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          updateListPosts(url);
+        }, 5000);
       });
-    setTimeout(() => {
-      newPosts.finally(updateListPosts(url));
-    }, 5000);
   };
 
   elements.form.addEventListener('submit', (e) => {
