@@ -11,15 +11,15 @@ export default (state, elements, watchedState) => {
     .notOneOf([state.data.urls], 'repleated');
 
   const updateListPosts = (url) => {
+    const newPosts = checkNewPosts(url, state.data.posts)
+      .then((list) => {
+        list.forEach((post) => {
+          post.id = uniqueId();
+        });
+        watchedState.data.posts.push(...list);
+      });
     setTimeout(() => {
-      checkNewPosts(url, state.data.posts)
-        .then((newPosts) => {
-          newPosts.forEach((post) => {
-            post.id = uniqueId();
-          });
-          watchedState.data.posts.push(...newPosts);
-        })
-        .finally(updateListPosts(url));
+      newPosts.finally(updateListPosts(url));
     }, 5000);
   };
 

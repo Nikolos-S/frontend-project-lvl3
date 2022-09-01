@@ -1,8 +1,8 @@
 import getNetworkRequest from './networkRequest.js';
 import parse from './parse.js';
 
-const checkNewPosts = (url, prevPosts, i18nInstance) => {
-  const newPosts = getNetworkRequest(url, i18nInstance).then((promise) => {
+const checkNewPosts = (url, prevPosts) => {
+  const newPosts = getNetworkRequest(url).then((promise) => {
     const [, postsData] = parse(url, promise);
     return postsData;
   })
