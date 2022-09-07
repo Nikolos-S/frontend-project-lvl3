@@ -18,16 +18,11 @@ export default (state, elements, watchedState) => {
       .notOneOf([getUrls(state.data.feeds)], 'repleated');
 
     schema.validate(url)
-      .then(() => {
-        getNetworkRequest(url).then((data) => {
-          const [feedData, postsData] = parse(url, data);
-          watchedState.data.feeds.push(feedData);
-          watchedState.data.posts.push(...postsData);
-          watchedState.processState = 'sent';
-        }).catch((rssErr) => {
-          watchedState.error = rssErr.message;
-          watchedState.processState = 'error';
-        });
+      .then(() => getNetworkRequest(url)).then((data) => {
+        const [feedData, postsData] = parse(url, data);
+        watchedState.data.feeds.push(feedData);
+        watchedState.data.posts.push(...postsData);
+        watchedState.processState = 'sent';
       }).catch((err) => {
         watchedState.error = err.message;
         watchedState.processState = 'error';

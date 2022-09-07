@@ -1,5 +1,4 @@
 const handleProcessState = (processState, i18nInstance, elements, error) => {
-  console.log(processState);
   const parent = elements.input.closest('.text-white');
   const pEl = document.createElement('p');
   pEl.classList.add('feedback', 'm-0', 'position-absolute', 'small');
