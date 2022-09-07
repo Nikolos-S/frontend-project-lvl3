@@ -1,3 +1,5 @@
+import uniqueId from 'lodash/uniqueId.js';
+
 const parse = (url, document) => {
   const parser = new DOMParser();
   const domRss = parser.parseFromString(document.contents, 'text/xml');
@@ -17,6 +19,7 @@ const parse = (url, document) => {
     const linkPost = item.querySelector('link').textContent;
     const descriptionPost = item.querySelector('description').textContent;
     return [...acc, {
+      id: uniqueId(),
       title: titlePost,
       link: linkPost,
       description: descriptionPost,

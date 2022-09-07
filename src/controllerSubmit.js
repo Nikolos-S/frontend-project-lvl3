@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-import uniqueId from 'lodash/uniqueId.js';
 import getNetworkRequest from './utilityPrograms/networkRequest.js';
 import parse from './utilityPrograms/parse.js';
 
@@ -22,9 +21,6 @@ export default (state, elements, watchedState) => {
       .then(() => {
         getNetworkRequest(url).then((data) => {
           const [feedData, postsData] = parse(url, data);
-          postsData.forEach((post) => {
-            post.id = uniqueId();
-          });
           watchedState.data.feeds.push(feedData);
           watchedState.data.posts.push(...postsData);
           watchedState.processState = 'sent';
