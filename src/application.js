@@ -40,7 +40,7 @@ const application = () => {
 
   const updateListPosts = (feeds) => {
     const urls = feeds.map((feed) => feed.urlFeed);
-    const promises = urls.map((url) => getNetworkRequest(url)
+    const listPosts = urls.map((url) => getNetworkRequest(url)
       .then((data) => {
         const [, postsData] = parse(url, data);
         postsData.filter((post) => state.data.posts
@@ -50,7 +50,7 @@ const application = () => {
         });
         watchedState.data.posts.push(...postsData);
       }));
-    Promise.all(promises).finally(() => {
+    Promise.all(listPosts).finally(() => {
       setTimeout(() => updateListPosts(feeds), 5000);
     });
   };
