@@ -4,6 +4,7 @@ const handleProcessState = (processState, i18nInstance, elements, error) => {
   pEl.classList.add('feedback', 'm-0', 'position-absolute', 'small');
   switch (processState) {
     case 'sending':
+      elements.block.submit.disabled = true;
       elements.input.classList.remove('is-invalid');
       pEl.classList.add('text-info');
       pEl.textContent = i18nInstance.t('loading');

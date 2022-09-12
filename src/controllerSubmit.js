@@ -7,7 +7,6 @@ export default (state, elements, watchedState) => {
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
-    elements.block.submit.disabled = true;
     watchedState.processState = 'sending';
     const formData = new FormData(e.target);
     const url = formData.get('url');
